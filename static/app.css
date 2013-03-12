@@ -1,0 +1,27 @@
+#load_container {
+    display:none;
+}
+.item {
+    float:left;
+    padding:5px 0;
+}
+.item .item_text {
+    display:none;
+}
+.item:hover .item_text {
+    padding:5px;
+    margin-right:5px;
+    background-color:#909090;
+    opacity: .8;
+    display:block;
+    position:absolute;
+    top:50px;
+}
+.item a {
+    text-decoration: none;
+    color:white;
+}
+#status {
+    width:200px;
+    margin:0 auto;
+}
