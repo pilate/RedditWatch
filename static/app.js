@@ -59,10 +59,11 @@ App.get_images = function () {
     }
     App.loading();
 
+    var url = "http://www.reddit.com/r/" + App.reddits + ".json";
     // Use JSONP to get reddit articles
     jQuery.ajax({
         'type': 'GET',
-        'url': App.api_url,
+        'url': url,
         'dataType': 'jsonp',
         'jsonp': 'jsonp',
         'success': App.json_callback,
@@ -94,7 +95,7 @@ App.json_callback = function (reddit_json) {
                 'css': {
                     'width': App.settings.item_width + "px"
                 }
-            }).load(App.masonry_reload);
+            }).load(App.masonry_add);
             new_div.append(new_img)
 
             // Hover label
@@ -125,16 +126,31 @@ App.json_callback = function (reddit_json) {
     setTimeout(App.loaded, 2000);
 };
 
-App.masonry_reload = function (e) {
+App.masonry_add = function (e) {
     // Move parent of image loaded into visible div
     var parent = jQuery(e.target.parentNode);
     App.container.append(parent);
+
     // Update masonry with new element
     App.container.masonry("appended", parent);
 };
 
+// Clear display and start over
+App.reload = function () {
+    jQuery("#container, #load_container").empty();
+    App.container.masonry("reload");
+};
+
+App.change_reddits = function () {
+    App.reddits = this.value;
+    App.after = "";
+    App.reload();
+    App.get_images();
+}
+
 jQuery(function () {
     var jq_wind = jQuery(window);
+    var header_input = jQuery("#header input");
 
     // Get more images if we're near the bottom of the page (100px)
     jq_wind.scroll(function() {
@@ -144,8 +160,7 @@ jQuery(function () {
     });
 
     // Cache repeatedly used elements/variables
-    App.reddits = window.location.hash.substr(1) || "pics";
-    App.api_url = "http://www.reddit.com/r/" + App.reddits + ".json";
+    App.reddits = header_input.val() || header_input.attr("placeholder");
     App.container = jQuery("#container");
     App.load_container = jQuery("#load_container");
     App.status = jQuery("#status");
@@ -156,6 +171,9 @@ jQuery(function () {
         'columnWidth': App.settings.item_width,
         'gutterWidth': 10
     });
+
+    header_input.attr("placeholder", App.reddits);
+    header_input.change(App.change_reddits);
 
     // Get the first page of images
     App.get_images();

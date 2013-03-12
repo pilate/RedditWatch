@@ -1,7 +1,19 @@
-#load_container {
-    display:none;
+#header {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    background:#909090;
+    z-index:5;
+    padding-left:5%;
 }
+#header input {
+    margin:4px 5px 5px;
+    width:30%;
+}
+
 .item {
+    z-index:1;
     float:left;
     padding:5px 0;
 }
@@ -15,11 +27,15 @@
     opacity: .8;
     display:block;
     position:absolute;
-    top:50px;
+    top:10%;
 }
 .item a {
     text-decoration: none;
     color:white;
+}
+
+#load_container {
+    display:none;
 }
 #status {
     width:200px;
